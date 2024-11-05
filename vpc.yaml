@@ -17,8 +17,20 @@ Resources:
     Properties:
       VpcId: !Ref MyVPC
       CidrBlock: "172.16.1.0/24"
-      AvailabilityZone: !Select [0, !GetAZs ""]
+      AvailabilityZone: !Select [0, !GetAZs '']
       MapPublickIpOnLaunch: true
       Tags:
         - Key: Name
           Value: PublicSubnet1A
+
+  AppPrivateSubnet1A:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: '172.16.2.0/24'
+      AvailabilityZone: !Subnet [0, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: AppPrivateSubnet1A
+          
+
