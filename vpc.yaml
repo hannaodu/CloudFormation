@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "CloudFormation for VPC"
 
 Resources:
-# My VPC
+  # My VPC
   MyVPC:
     Type: "AWS::EC2::VPC"
     Properties:
@@ -12,28 +12,28 @@ Resources:
       Tags:
         - Key: Name
           Value: MyVpc
-#Punlic Subnet in AZ1       
+  #Public Subnet in AZ1
   PublicSubnet1A:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref MyVPC
       CidrBlock: "172.16.1.0/24"
       AvailabilityZone: !Select [0, !GetAZs ""]
-      MapPublickIpOnLaunch: true
+      MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
           Value: PublicSubnet1A
-#App Private Subnet in AZ1  
+  #App Private Subnet in AZ1
   AppPrivateSubnet1A:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref MyVPC
       CidrBlock: "172.16.2.0/24"
-      AvailabilityZone: !Subnet [0, !GetAZs ""]
+      AvailabilityZone: !Select [0, !GetAZs ""]
       Tags:
         - Key: Name
           Value: AppPrivateSubnet1A
-#Data Private Subnet in AZ1  
+  #Data Private Subnet in AZ1
   DataPrivateSubnet1A:
     Type: "AWS::EC2::Subnet"
     Properties:
@@ -43,36 +43,34 @@ Resources:
       Tags:
         - Key: Name
           Value: DataPrivateSubnet1A
-#Punlic Subnet in AZ2  
+  #Punlic Subnet in AZ2
   PublicSubnet2B:
-    Type: 'AWS;:EC2::Subnet'
+    Type: "AWS::EC2::Subnet"
     Properties:
-       VpcId: !Ref MyVPC
-       CidrBlock: '172.16.4.0/24'  
-       AvailabilityZone: !Select [1, !GetAZs '']
-       MapPublicIpOnLaunch: true
-       Tags:
-         - Key: Name
-           Value: PublicSubnet2B
-#App Private Subnet in AZ2  
+      VpcId: !Ref MyVPC
+      CidrBlock: "172.16.4.0/24"
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: PublicSubnet2B
+  #App Private Subnet in AZ2
   AppPrivateSubnet2B:
-    Type: 'AWS::EC2::Subnet'
+    Type: "AWS::EC2::Subnet"
     Properties:
-       VpcId: !Ref MyVPC
-       CidrBlock: '172.16.5.0/24'
-       AvailabilityZone: !Select [1, !GetAZs '']
-       Tags:
+      VpcId: !Ref MyVPC
+      CidrBlock: "172.16.5.0/24"
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      Tags:
         - Key: Name
           Value: AppPrivateSubnet2B
-#Data Private Subnet in AZ2  
+  #Data Private Subnet in AZ2
   DataPrivateSubnet2B:
-    Type: 'AWS::EC2::Subnet'
+    Type: "AWS::EC2::Subnet"
     Properties:
-       VpcId: !Ref MyVPC
-       CidrBlock: '172.16.6.0/24'
-       AvailabilityZone: !Select [1, !GetAZs '']
-       Tags:
+      VpcId: !Ref MyVPC
+      CidrBlock: "172.16.6.0/24"
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      Tags:
         - Key: Name
           Value: DataPrivateSubet2B
-
-       
