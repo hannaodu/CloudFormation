@@ -74,3 +74,12 @@ Resources:
       Tags:
         - Key: Name
           Value: DataPrivateSubet2B
+  #internet Gateway IGW
+  Internet Gateway:
+  Type: 'AWS::EC2::InternetGateway'
+  Properties:
+    Tags:
+      - Key: None
+        Value: MyVPC-IGW
+
+  #Attach Gateway               
