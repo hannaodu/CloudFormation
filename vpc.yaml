@@ -12,8 +12,9 @@ Resources:
       Tags:
         - Key: Name
           Value: MyVpc
+
   #Public Subnet in AZ1
-  PublicSubnet2A:
+  PublicSubnet1A:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref MyVPC
@@ -23,6 +24,7 @@ Resources:
       Tags:
         - Key: Name
           Value: PublicSubnet1A
+
   #App Private Subnet in AZ1
   AppPrivateSubnet1A:
     Type: "AWS::EC2::Subnet"
@@ -33,6 +35,7 @@ Resources:
       Tags:
         - Key: Name
           Value: AppPrivateSubnet1A
+
   #Data Private Subnet in AZ1
   DataPrivateSubnet1A:
     Type: "AWS::EC2::Subnet"
@@ -43,7 +46,8 @@ Resources:
       Tags:
         - Key: Name
           Value: DataPrivateSubnet1A
-  #Punlic Subnet in AZ2
+
+  #Public Subnet in AZ2
   PublicSubnet2B:
     Type: "AWS::EC2::Subnet"
     Properties:
@@ -54,6 +58,7 @@ Resources:
       Tags:
         - Key: Name
           Value: PublicSubnet2B
+
   #App Private Subnet in AZ2
   AppPrivateSubnet2B:
     Type: "AWS::EC2::Subnet"
@@ -64,6 +69,7 @@ Resources:
       Tags:
         - Key: Name
           Value: AppPrivateSubnet2B
+
   #Data Private Subnet in AZ2
   DataPrivateSubnet2B:
     Type: "AWS::EC2::Subnet"
@@ -74,17 +80,14 @@ Resources:
       Tags:
         - Key: Name
           Value: DataPrivateSubet2B
+
   #internet Gateway IGW
-  Internet Gateway:
-  Type: "AWS::EC2::InternetGateway"
-  Properties:
-    Tags:
-      - Key: None
-        Value: MyVPC-IGW
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
 
   #Attach Gateway
   AttachGateway:
-    Type: "AWS::EC2::VPCGaatewayAttachment"
+    Type: "AWS::EC2::VPCGatewayAttachment"
     Properties:
       VpcId: !Ref MyVPC
       InternetGatewayId: !Ref InternetGateway
@@ -97,6 +100,7 @@ Resources:
       Tags:
         - Key: Name
           Value: PublicRouteTable
+
   #Public Route
   PublicRoute:
     Type: "AWS::EC2::Route"
@@ -105,12 +109,10 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       DestinationCidrBlock: "0.0.0.0/0"
       GatewayId: !Ref InternetGateway
-      
+
   #Public Subnet Association
   PublicSubnet1ATableRouteAssociation:
-    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      SubnetId: !Ref PublicSubnet2A
+      SubnetId: !Ref PublicSubnet1A
       RouteTableId: !Ref PublicRouteTable
-
-  
