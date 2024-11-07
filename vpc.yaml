@@ -13,7 +13,7 @@ Resources:
         - Key: Name
           Value: MyVpc
   #Public Subnet in AZ1
-  PublicSubnet1A:
+  PublicSubnet2A:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref MyVPC
@@ -76,24 +76,41 @@ Resources:
           Value: DataPrivateSubet2B
   #internet Gateway IGW
   Internet Gateway:
-  Type: 'AWS::EC2::InternetGateway'
+  Type: "AWS::EC2::InternetGateway"
   Properties:
     Tags:
       - Key: None
         Value: MyVPC-IGW
 
-  #Attach Gateway 
+  #Attach Gateway
   AttachGateway:
-    Type: 'AWS::EC2::VPCGaatewayAttachment'
+    Type: "AWS::EC2::VPCGaatewayAttachment"
     Properties:
       VpcId: !Ref MyVPC
-      InternetGatewayId: !Ref InternetGateway 
+      InternetGatewayId: !Ref InternetGateway
 
   #Route Table
   PublicRouteTable:
-    Type: 'AWS::EC2::RouteTable'
+    Type: "AWS::EC2::RouteTable"
     Properties:
       VpcId: !Ref MyVPC
       Tags:
         - Key: Name
-          Value: PublicRouteTable                 
+          Value: PublicRouteTable
+  #Public Route
+  PublicRoute:
+    Type: "AWS::EC2::Route"
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGateway
+      
+  #Public Subnet Association
+  PublicSubnet1ATableRouteAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet2A
+      RouteTableId: !Ref PublicRouteTable
+
+  
