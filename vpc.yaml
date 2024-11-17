@@ -84,6 +84,10 @@ Resources:
   #internet Gateway IGW
   InternetGateway:
     Type: "AWS::EC2::InternetGateway"
+    Properties:
+      Tags:
+        - Key: Name
+          Value: MyVPC-IGW
 
   #Attach Gateway
   AttachGateway:
@@ -116,3 +120,17 @@ Resources:
     Properties:
       SubnetId: !Ref PublicSubnet1A
       RouteTableId: !Ref PublicRouteTable
+
+  #Bastion Host EC2
+  BastionHost:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      InstanceType: t2.micro
+      KeyName: !Ref bastion
+      ImageId: ami-0b2ed2e3df8cf9080
+      SubnetId: !Ref PublicSubnet1A
+      SecurityGroupIds:
+        - !Ref BastionSG
+      Tags:
+        - Key: Name
+          Value: BastionHost
