@@ -146,3 +146,53 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 5.151.198.139/32
+
+      # AppInstance1A
+  AppInstance1A:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      InstanceType: t2.micro
+      KeyName: !Ref bastion
+      ImageId: ami-0b2ed2e3df8cf9080
+      SubnetId: !Ref AppPrivateSubnet1A
+      SecurityGroupIds:
+        - !Ref AppInstance1ASG
+      Tags:
+        - Key: Name
+          Value: App1
+
+  # AppInstance2B
+  AppInstance2B:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0b2ed2e3df8cf9080
+      SubnetId: !Ref AppPrivateSubnet2B
+      SecurityGroupIds:
+        - !Ref AppInstance2ASG
+      Tags:
+        - Key: Name
+          Value: App2
+  #SG App 1A
+  AppInstance1ASG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Allow SSH from Bastion"
+      VpcId: !Ref MyVPC
+      SecurityGroupIngress:
+        - IpProtocal: tcp
+          FromPort: 22
+          ToPort: 22
+          SourceSecurityGroupId: !Ref BastionSG
+
+    #SG App 2B
+  AppInstance2SG:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Allow ICMP ping from App1"
+      VpcId: !Ref MyVPC
+      SecurityGroupIngress:
+        - IpProtocal: icmp
+          FromPort: -1
+          ToPort: -1
+          SourceSecurityGroupId: !Ref AppInstance1ASG
