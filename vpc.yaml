@@ -23,7 +23,7 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: PublicSubnet1A
+          Value: PublicSubnet2A
 
   #App Private Subnet in AZ1
   AppPrivateSubnet1A:
@@ -147,12 +147,12 @@ Resources:
           ToPort: 22
           CidrIp: 5.151.198.139/32
 
-      # AppInstance1A
+  # AppInstance1A
   AppInstance1A:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: "AWS::EC2::Instance"
     Properties:
       InstanceType: t2.micro
-      KeyName: !Ref bastion
+      KeyName: bastion
       ImageId: ami-0b2ed2e3df8cf9080
       SubnetId: !Ref AppPrivateSubnet1A
       SecurityGroupIds:
@@ -163,16 +163,17 @@ Resources:
 
   # AppInstance2B
   AppInstance2B:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: "AWS::EC2::Instance"
     Properties:
       InstanceType: t2.micro
       ImageId: ami-0b2ed2e3df8cf9080
       SubnetId: !Ref AppPrivateSubnet2B
       SecurityGroupIds:
-        - !Ref AppInstance2ASG
+        - !Ref AppInstance2BSG
       Tags:
         - Key: Name
           Value: App2
+
   #SG App 1A
   AppInstance1ASG:
     Type: "AWS::EC2::SecurityGroup"
@@ -180,19 +181,19 @@ Resources:
       GroupDescription: "Allow SSH from Bastion"
       VpcId: !Ref MyVPC
       SecurityGroupIngress:
-        - IpProtocal: tcp
+        - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           SourceSecurityGroupId: !Ref BastionSG
 
     #SG App 2B
-  AppInstance2SG:
+  AppInstance2BSG:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: "Allow ICMP ping from App1"
+      GroupDescription: "Allow ICMP ping from APp1"
       VpcId: !Ref MyVPC
       SecurityGroupIngress:
-        - IpProtocal: icmp
+        - IpProtocol: icmp
           FromPort: -1
           ToPort: -1
           SourceSecurityGroupId: !Ref AppInstance1ASG
