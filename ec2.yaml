@@ -123,7 +123,7 @@ Resources:
 
   # Application Load Balancer
   MyLoadBalancer:
-    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
     Properties:
       Subnets:
         - !Ref PublicSubnet1A
@@ -131,13 +131,22 @@ Resources:
       SecurityGroups:
         - !Ref WebServerSecurityGroup
 
-  # Target Group For ALB 
+  # Target Group For ALB
   MyTargetGroup:
-    Type: 'AWS::ElasticaLoadBalancingV2::TargetGroup'
+    Type: "AWS::ElasticaLoadBalancingV2::TargetGroup"
     Properties:
       VpcId: !Ref MyVPC
       Port: 80
-      Protocol: 'HTTP'
+      Protocol: "HTTP"
 
-                    
+  # Listener for ALB
+  MyListener:
+    Type: "AWS::ElasticLoadBalancing::Listener"
+    Properties:
+      DefaultActions:
+        - Type: "forward"
+          TargetGroupARN: !Ref MyTargetGroup
+          LoadBalancerArn: !Ref MyLoadBalancer
+      Port: 80
+      Protocol: "HTTP"
       
