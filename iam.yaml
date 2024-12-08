@@ -5,32 +5,47 @@ Resources:
   MyIAMUser:
     Type: "AWS::IAM::User"
     Properties:
-      UserName: "HannaCFN"
+      UserName: "hannaCFN"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/AdministratorAccess"
   #My IAM Group
   MyIAMGroup:
-    Type: 'AWS::IAM::Group'
+    Type: "AWS::IAM::Group"
     Properties:
-      GroupName: 'HannaCFN'
+      GroupName: "hannaCFN"
 
-   # Attach User to Group
-  UserToGroup:   
-     Type: 'AWS:;IAM::UserToGroupAddition'
-     Properties:
-       GroupName: !Ref MyIAMGroup
-       Users:
-         - !Ref MyIAMUser
+    # Attach User to Group
+  UserToGroup:
+    Type: "AWS:;IAM::UserToGroupAddition"
+    Properties:
+      GroupName: !Ref MyIAMGroup
+      Users:
+        - !Ref MyIAMUser
 
-   # IAM Role for EC2
+    # IAM Role for EC2
   MyIAMRole:
-    Type: 'AWS::IAM::Role'
+    Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
-          -Effect: 'Allow'
-          Principle:
-            Service:['ec2.amazonaws.com']
-          Action:['sts:AssumeRole']    
+          -Effect: "Allow"
+          Principal:
+            Service: ["ec2.amazonaws.com"]
+          Action: ["sts:AssumeRole"]
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/PowerUserAccess"
 
+      # S3 Custom Policy
+      MyIAMPolicy:
+        Type: "AWS::IAM::Policy"
+        Properties:
+          PolicyName: "CustomePolicy"
+          PolicyDocument: Version '2012-10-17'
+          Statement:
+            - Effect: "Allow"
+              Action:
+                - "s3:GetObject"
+              Resource: "*"
+              Roles:
+                - !Ref MyIAMRole
